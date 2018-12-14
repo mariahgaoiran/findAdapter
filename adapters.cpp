@@ -1,14 +1,22 @@
 // GOALS:
 // fix lowercase function dribbling into next word
+// clean print statements so theyre all the same
 
+// FIRST TEST: HMDI -> VGA
+// SECOND TEST: DP (-> HDMI) -> DVI
+
+
+// For string manipulation and printing
+#include <algorithm> // for transform
+#include <string>
+#include <iostream>
 #include <stdio.h>
-#include <ctype.h>
 
-char* lowercase(char* word) {
-    for(char i=0; i < (sizeof(word)/sizeof(char)); i++) {
-      // printf("%d\n",i);
-      word[i] = tolower(word[i]);
-    }
+/*
+  Converts the word (string, ending with \0) to lowercase
+*/
+std::string lowercase(std::string word) {
+    std::transform(word.begin(), word.end(), word.begin(), ::tolower);
     return word;
 }
 
@@ -22,20 +30,19 @@ int main (int argc, char* argv[]) {
 
   /* Check for proper usage */
   if (argc != 5) {
-    printf("Usage: %s input output in_gender out_gender\n", argv[0]);
-    printf ("\nList of possible connections:\n");
-    printf ("VGA\nDVI\nDP\nHDMI\n"); // dont forget mini
+    // printf("Usage: %s input output in_gender out_gender\n", argv[0]);
+    // printf ("\nList of possible connections:\n");
+    // printf ("VGA\nDVI\nDP\nHDMI\n"); // dont forget mini
     return(1);
   }
 
-  printf("Welcome to the adapter finder.\n");
+  std::cout << "Welcome to the adapter finder." << "\n";
 
   /* Clean arguments, set all to lowercase */
-  // char* input = lowercase(argv[1]);
-  char* input = lowercase(argv[1]);
-  char* output = argv[2];
-  char* in_gender = argv[3]; // get first letter only
-  char* out_gender = lowercase(argv[4]);
+  std::string input = lowercase(argv[1]);
+  std::string output = lowercase(argv[2]);
+  std::string in_gender = lowercase(argv[3]); // get first letter only
+  std::string out_gender = lowercase(argv[4]);
 
   // printf("-------------------%s %s %s %s\n", input, output, in_gender, out_gender);
 
@@ -43,13 +50,33 @@ int main (int argc, char* argv[]) {
   // # different DVI connections?
   // # bidirectional?
 
-  printf("You selected to go from %s (%s) -> %s (%s)\n", input, in_gender, output, out_gender);
+  printf("You selected to go from %s (%s) -> %s (%s)\n", input.c_str(), in_gender.c_str(), output.c_str(), out_gender.c_str());
 
+  // Find row with V1: VGA
+
+  // Find column with V2: hdmi
+  // Split by :, get G1
+  // If >0, return direct adapter
+
+  // If we do not have direct adapter...
+  // For every row
+    // Find column with V2: hdmi
+    // Split by :, get G1 (first slice)
+    // If >0, push V3 (type) / V4 (gender) onto queue
+    // Split by :, get G1 (second slice)
+    // If >0, push V3 (type) / V4 (gender) onto queue
+    // while queue !empty
+      // Find row with V1: VGA
+      // Find column with V3 (middle man)
+      // Split by :, get G4
+      // if >0, return V5, V3+V4, V2
+
+  // print "no adapters available for that input and output"
 
 
 }
 
-
+// Funciton to find value from input, output, and gender (aka: row, column, and slice)
 
 
 //

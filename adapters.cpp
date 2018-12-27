@@ -106,13 +106,14 @@ int main (int argc, char* argv[]) {
     }
 
     int connector_gender = 0;
-    if((input=="m")&&(output=="f")) {
+    if((in_gender=="m")&&(out_gender=="f")) {
       connector_gender = 1;
-    } else if((input=="f")&&(output=="m")) {
+    } else if((in_gender=="f")&&(out_gender=="m")) {
       connector_gender = 2;
-    } else if ((input=="f")&&(output=="f")) {
+    } else if ((in_gender=="f")&&(out_gender=="f")) {
       connector_gender = 3;
     }
+    std::cout << connector_gender << "\n";
     std::cout << connectors[connector_gender] << "\n";
 
     // Split by :, get G1
@@ -121,7 +122,26 @@ int main (int argc, char* argv[]) {
     // FIX: capitlize these, and add genders
     if(connectors[connector_gender] > 0) {
       std::cout << "There is a connector that goes directly from " << input << " to " << output << ".\n";
+      // break;
+    } else {
+      // If we do not have direct adapter...
+      // For every row
+
+        // Find column with V2: vga
+        // Split by :, get G1 (first slice)
+        // If >0, push V3 (type) / V4 (gender) onto queue
+        // Split by :, get G1 (second slice)
+        // If >0, push V3 (type) / V4 (gender) onto queue
+        // while queue !empty
+          // Find row with V1: VGA
+          // Find column with V3 (middle man)
+          // Split by :, get G4
+          // if >0, return V5, V3+V4, V2
+
+      // print "no adapters available for that input and output"
     }
+
+
 
     // std::cout << "There are no adapters available for these connections."
 
@@ -132,25 +152,12 @@ int main (int argc, char* argv[]) {
 
 
 
-  // If we do not have direct adapter...
-  // For every row
-    // Find column with V2: hdmi
-    // Split by :, get G1 (first slice)
-    // If >0, push V3 (type) / V4 (gender) onto queue
-    // Split by :, get G1 (second slice)
-    // If >0, push V3 (type) / V4 (gender) onto queue
-    // while queue !empty
-      // Find row with V1: VGA
-      // Find column with V3 (middle man)
-      // Split by :, get G4
-      // if >0, return V5, V3+V4, V2
 
-  // print "no adapters available for that input and output"
 
 
 }
 
-
+// BASH
 //
 // ### FIND DIRECT CONNECTION ###
 //

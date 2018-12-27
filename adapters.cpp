@@ -10,6 +10,9 @@
 #include <algorithm> // for transform
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
 #include <stdio.h>
 
 /*
@@ -18,6 +21,13 @@
 std::string lowercase(std::string word) {
     std::transform(word.begin(), word.end(), word.begin(), ::tolower);
     return word;
+}
+
+/*
+  Find number of available adapters for input, output, and gender (aka: row, column, and slice)
+*/
+int available(std::string row, std::string) {
+
 }
 
 int main (int argc, char* argv[]) {
@@ -52,11 +62,75 @@ int main (int argc, char* argv[]) {
 
   printf("You selected to go from %s (%s) -> %s (%s)\n", input.c_str(), in_gender.c_str(), output.c_str(), out_gender.c_str());
 
-  // Find row with V1: VGA
+  std::string token;
+  std::vector<std::string> types;
+  std::ifstream adapterList ("adapters_avail");
 
-  // Find column with V2: hdmi
-  // Split by :, get G1
-  // If >0, return direct adapter
+  // assign
+
+  if (adapterList.is_open()) {
+    getline(adapterList, token);
+    std::stringstream firstLine(token);
+
+    while(getline(firstLine, token, ',')) {
+      types.push_back(token);
+    }
+
+    // Find row with V1: HDMI
+    getline(adapterList, token, ','); // get type of first line
+    while (token != input) {
+      getline(adapterList, token); // trash the rest of line
+      getline(adapterList, token, ','); // get type of next line
+    }
+
+  //if you find the right row
+// FIX: do check that you found the right row
+
+  // Find column with V2: VGA
+    std::ptrdiff_t pos = distance(types.begin(), find(types.begin(), types.end(), output));
+    std::cout << pos << "\n";
+
+    getline(adapterList, token, ',');
+    for(pos; pos>0; pos--) {
+      getline(adapterList, token, ',');
+    }
+    std::cout << token << "\n";
+
+    int connectors[4] = {0,0,0,0};
+    std::stringstream column(token);
+
+    int i = 0;
+    while(getline(column, token, ':')) {
+      connectors[i] = std::stoi(token);
+      i++;
+    }
+
+    int connector_gender = 0;
+    if((input=="m")&&(output=="f")) {
+      connector_gender = 1;
+    } else if((input=="f")&&(output=="m")) {
+      connector_gender = 2;
+    } else if ((input=="f")&&(output=="f")) {
+      connector_gender = 3;
+    }
+    std::cout << connectors[connector_gender] << "\n";
+
+    // Split by :, get G1
+    // If >0, return direct adapter
+
+    // FIX: capitlize these, and add genders
+    if(connectors[connector_gender] > 0) {
+      std::cout << "There is a connector that goes directly from " << input << " to " << output << ".\n";
+    }
+
+    // std::cout << "There are no adapters available for these connections."
+
+  }
+  adapterList.close();
+
+
+
+
 
   // If we do not have direct adapter...
   // For every row
@@ -75,8 +149,6 @@ int main (int argc, char* argv[]) {
 
 
 }
-
-// Funciton to find value from input, output, and gender (aka: row, column, and slice)
 
 
 //
